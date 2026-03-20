@@ -11,3 +11,6 @@ El sistema debe generar un archivo main.dart en Flutter con un widget sin estado
 
 ## Movil
 <img width="431" height="750" alt="image" src="https://github.com/user-attachments/assets/9496241d-2c8b-4980-b0c7-cb3fcc1e5cbf" />
+
+## Hoja
+<img width="426" height="825" alt="image" src="https://github.com/user-attachments/assets/64fdded4-df7a-4785-97ca-1340b16ad15b" />
