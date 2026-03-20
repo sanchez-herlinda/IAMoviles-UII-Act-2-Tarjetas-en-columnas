@@ -1,158 +1,212 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const RestauranteApp());
+  runApp(const MyApp());
 }
 
-// 1. Clase Platillo (Modelo de datos)
-class Platillo {
-  final String titulo;
-  final String subtitulo;
-  final String imgUrl;
-
-  Platillo({
-    required this.titulo,
-    required this.subtitulo,
-    required this.imgUrl,
-  });
-}
-
-class RestauranteApp extends StatelessWidget {
-  const RestauranteApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 2. Lista de diccionarios (datos de ejemplo con links actualizados)
-    final List<Map<String, String>> datosPlatillos = [
-      {
-        'titulo': 'Lasagna Tradizionale',
-        'subtitulo': 'Pasta artesanal con ragú de carne y bechamel.',
-        'img_url':
-            'https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=200&h=200&fit=crop',
-      },
-      {
-        'titulo': 'Pizza Margherita',
-        'subtitulo': 'Tomate San Marzano, mozzarella y albahaca fresca.',
-        'img_url':
-            'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?q=80&w=200&h=200&fit=crop',
-      },
-      {
-        'titulo': 'Tiramisú Clásico',
-        'subtitulo': 'Bizcocho savoiardi, café espresso y mascarpone.',
-        'img_url':
-            'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?q=80&w=200&h=200&fit=crop',
-      },
-    ];
-
-    // Convertir la lista
-    final List<Platillo> listaPlatillos = datosPlatillos.map((item) {
-      return Platillo(
-        titulo: item['titulo']!,
-        subtitulo: item['subtitulo']!,
-        imgUrl: item['img_url']!,
-      );
-    }).toList();
-
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: const Color(0xFFFFF9F2),
-        appBar: AppBar(
-          title: const Text(
-            'Il Sapore Italiano',
-            style: TextStyle(fontWeight: FontWeight.bold),
+      title: 'Restaurante Roma',
+      home: PaginaRecomendaciones(),
+    );
+  }
+}
+
+class PaginaRecomendaciones extends StatelessWidget {
+  const PaginaRecomendaciones({super.key});
+
+  // Colores definidos estáticamente
+  final Color backgroundColor = const Color(0xFFF9F9F9); // Blanco hueso
+  final Color detailColor = const Color(0xFF8B0000); // Rojo elegante
+  final Color textColor = const Color(0xFF1A1A1A); // Gris muy oscuro
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: detailColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 20,
           ),
-          backgroundColor: const Color(0xFFD35400),
-          foregroundColor: Colors.white,
+          onPressed: () => Navigator.maybePop(context),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: listaPlatillos.map((platillo) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Row(
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'La',
+              style: GoogleFonts.playfairDisplay(
+                fontSize: 12,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 2),
+            Text(
+              'ROMA',
+              style: GoogleFonts.playfairDisplay(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+                height: 0.9,
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Recomendaciones',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Contenedor de la imagen con flechas superpuestas
+                  Stack(
                     children: [
-                      Expanded(
-                        child: Card(
-                          elevation: 6,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Colors.white,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.network(
+                          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1000',
+                          height: 250,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // Flecha izquierda centrada verticalmente
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                // Lógica para navegar hacia atrás
+                              },
                             ),
-                            child: Row(
-                              children: [
-                                // Imagen con manejo de errores (SOLUCIÓN AQUÍ)
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                  ),
-                                  child: Image.network(
-                                    platillo.imgUrl,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                    // Si la imagen falla (404), mostramos este ícono en lugar de romper la app
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: 100,
-                                        height: 100,
-                                        color: Colors.grey[200],
-                                        child: const Icon(
-                                          Icons.broken_image,
-                                          color: Colors.grey,
-                                          size: 40,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                // Textos
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16.0,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          platillo.titulo,
-                                          style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xFF8E2714),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          platillo.subtitulo,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey[700],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          ),
+                        ),
+                      ),
+                      // Flecha derecha centrada verticalmente
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                // Lógica para navegar hacia adelante
+                              },
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                );
-              }).toList(),
+                  const SizedBox(height: 15),
+                  // Estrella centrada
+                  Center(child: Icon(Icons.star, color: detailColor, size: 30)),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Ensalada de Verano Roma',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Una mezcla fresca de ingredientes locales, aceite de oliva extra virgen y el toque secreto de la casa. Perfecta para comenzar tu experiencia italiana.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: textColor.withAlpha(204), // 80% de opacidad
+                      height: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 55,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: textColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: Text(
+                        'Añadir a carrito',
+                        style: GoogleFonts.playfairDisplay(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
+          ],
+        ),
+      ),
+      // Footer estático
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          color:
+              backgroundColor, // Fondo del footer del mismo color que el background
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Línea superior del mismo color que el encabezado (detailColor)
+              Divider(height: 1, color: detailColor),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Center(
+                  child: Text(
+                    '© 2024 Restaurante La ROMA',
+                    style: GoogleFonts.playfairDisplay(
+                      fontSize: 14,
+                      color: textColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
